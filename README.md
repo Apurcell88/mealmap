@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # MealMap 🍽️
 
 A mobile app that helps users choose recipes based on store selection, price per serving, and shopping efficiency.

@@ -1,4 +1,4 @@
-import { recipes } from "@/data/recipe";
+import { recipes } from "@/data/recipes";
 import { router, useLocalSearchParams } from "expo-router";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
@@ -64,6 +64,18 @@ export default function RecipeDetail() {
             </View>
           ))}
         </View>
+
+        <Pressable
+  style={styles.chooseStoreButton}
+  onPress={() =>
+    router.push({
+      pathname: "/store-select/[recipeId]",
+      params: { recipeId: recipe.id },
+    })
+  }
+>
+  <Text style={styles.chooseStoreButtonText}>Choose Store</Text>
+</Pressable>
 
         <Text style={styles.sectionTitle}>Instructions</Text>
 
@@ -178,6 +190,18 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: "900",
     color: "#18181b",
+  },
+  chooseStoreButton: {
+    marginTop: 24,
+    paddingVertical: 16,
+    borderRadius: 18,
+    backgroundColor: "#16a34a",
+    alignItems: "center",
+  },
+  chooseStoreButtonText: {
+    color: "#ffffff",
+    fontSize: 16,
+    fontWeight: "900",
   },
   sectionCard: {
     padding: 18,

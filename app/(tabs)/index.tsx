@@ -1,4 +1,4 @@
-import { recipes } from "@/data/recipe";
+import { recipes } from "@/data/recipes";
 import { router } from "expo-router";
 import { useMemo, useState } from "react";
 import {

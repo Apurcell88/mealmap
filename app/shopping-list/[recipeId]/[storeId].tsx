@@ -34,6 +34,18 @@ export default function ShoppingListScreen() {
 const checkedCount = checkedItems.length;
 const totalItems = recipe.ingredients.length;
 
+const groupedIngredients = recipe.ingredients.reduce((groups, ingredient) => {
+    const category = ingredient.category;
+
+    if (!groups[category]) {
+        groups[category] = [];
+    }
+
+    groups[category].push(ingredient);
+
+    return groups;
+}, {} as Record<string, typeof recipe.ingredients>)
+
   return (
     <ScrollView style={styles.container}>
       <Pressable style={styles.backButton} onPress={() => router.back()}>
@@ -61,31 +73,37 @@ const totalItems = recipe.ingredients.length;
       <Text style={styles.sectionTitle}>Items to buy</Text>
 
       <View style={styles.listCard}>
-        {recipe.ingredients.map((ingredient) => {
-  const isChecked = checkedItems.includes(ingredient.id);
+        {Object.entries(groupedIngredients).map(([category, ingredients]) => (
+            <View key={category} style={styles.categorySection}>
+                <Text style={styles.categoryTitle}>{category}</Text>
 
-  return (
-    <Pressable
-      key={ingredient.id}
-      style={styles.itemRow}
-      onPress={() => toggleItem(ingredient.id)}
-    >
-      <View style={[styles.checkbox, isChecked && styles.checkboxChecked]}>
-        {isChecked && <Text style={styles.checkmark}>✓</Text>}
-      </View>
+                {ingredients.map((ingredient) => {
+                    const isChecked = checkedItems.includes(ingredient.id);
 
-      <View style={styles.itemContent}>
-        <Text style={[styles.itemName, isChecked && styles.itemNameChecked]}>
-          {ingredient.name}
-        </Text>
+                    return (
+                        <Pressable
+                            key={ingredient.id}
+                            style={styles.itemRow}
+                            onPress={() => toggleItem(ingredient.id)}
+                        >
+                            <View style={[styles.checkbox, isChecked && styles.checkboxChecked]}>
+                                {isChecked && <Text style={styles.checkmark}>✓</Text>}
+                            </View>
 
-        <Text style={[styles.itemAmount, isChecked && styles.itemAmountChecked]}>
-          {ingredient.quantity} {ingredient.unit} • {ingredient.category}
-        </Text>
-      </View>
-    </Pressable>
-  );
-})}
+                            <View style={styles.itemContent}>
+                                <Text style={[styles.itemName, isChecked && styles.itemNameChecked]}>
+                                    {ingredient.name}
+                                </Text>
+
+                                <Text style={[styles.itemAmount, isChecked && styles.itemAmountChecked]}>
+                                    {ingredient.quantity} {ingredient.unit}
+                                </Text>
+                            </View>
+                        </Pressable>
+                    );
+                })}
+            </View>
+        ))}
       </View>
     </ScrollView>
   );
@@ -227,5 +245,17 @@ itemNameChecked: {
 itemAmountChecked: {
   color: "#a1a1aa",
   textDecorationLine: "line-through",
+},
+categorySection: {
+  marginBottom: 20,
+},
+
+categoryTitle: {
+  marginBottom: 8,
+  fontSize: 13,
+  fontWeight: "900",
+  color: "#16a34a",
+  textTransform: "uppercase",
+  letterSpacing: 1,
 },
 });
